@@ -2,7 +2,7 @@ const fs = require("fs");
 let input;
 try {
   input = fs
-    .readFileSync("./input1.txt", "utf-8")
+    .readFileSync("./input.txt", "utf-8")
     .split("\n")
     .filter((i) => i);
 } catch (err) {
@@ -49,18 +49,25 @@ for (const inv of invalidArr) {
       }
     }
   }
-  const nn = [];
+  let nn = [];
   for (const t of temp) {
     const [a, b] = t.split("|");
-    if (nn.indexOf(a) < 0) nn.push(a);
-    const idxa = nn.indexOf(a);
-    if (!nn.includes(b)) {
-      nn.splice(idxa + 1, 0, b);
-    }
-    const idxb = nn.indexOf(b);
-    if (idxa > idxb) {
-      nn.splice(idxb, 1);
-      nn.push(b);
+    if (!nn.includes(a)) nn.push(a);
+    if (!nn.includes(b)) nn.push(b);
+  }
+  let exit = false;
+  while (!exit) {
+    exit = true;
+    for (const t of temp) {
+      const [a, b] = t.split("|");
+      const ia = nn.indexOf(a);
+      const ib = nn.indexOf(b);
+      if (ia > ib) {
+        exit = false;
+        const aux = nn[ia];
+        nn[ia] = nn[ib];
+        nn[ib] = aux;
+      }
     }
   }
   newArr.push(nn);
