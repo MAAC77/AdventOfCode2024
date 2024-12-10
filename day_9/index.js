@@ -2,7 +2,7 @@ const fs = require("fs");
 let input;
 try {
   input = fs
-    .readFileSync("./input1.txt", "utf-8")
+    .readFileSync("./input.txt", "utf-8")
     .split("\n")
     .filter((i) => i);
 } catch (err) {
@@ -80,89 +80,41 @@ function part2() {
       }
     }
   }
-  console.log("temp", temp);
+  // console.log("temp", temp);
   for (let i = idx - 1; i >= 0; i--) {
-    console.log("==========================");
-    let exit = false;
+    // console.log("==========================");
+    // console.log(i);
     const regn = new RegExp(`${i}+`, "g");
     const nn = temp.join("").match(regn)[0];
-    const limit = nn.length;
-    console.log(limit);
-    while (!exit) {
-      let cc = 0;
-      let tt = [...temp];
-      let res = [...temp];
-      console.log(tt);
-      const li = tt.lastIndexOf(`${i}`);
-      const ip = tt.indexOf(".");
-      const pp = tt.join("").match(/(\.)\1*/g);
-      console.log("pp", pp);
-      if (pp.some((x) => x.length >= nn.length)) {
-        // console.log("YES");
-        console.log("nn", nn);
-        console.log("li", li);
-        console.log("ip", ip);
-        tt[ip] = `${i}`;
-        tt[li] = ".";
-        console.log(tt);
-        // const re = tt.join("").match(`/${i}/g`);
-        const reg = new RegExp(`${i}+`, "g");
-        const re = tt.join("").match(reg);
-        console.log(re);
-        // console.log("99.9".match(/9+/g));
-        // console.log(tt.join("").match(/9+/g));
-        if (re.length === 1) {
-          // temp = tt;
-          exit = true;
-        } else {
-          if (limit <= cc) {
-            c++;
-          } else {
-            cc = 0;
-            tt = [...res];
-            tt[ip] = "#";
-          }
-        }
-        temp = tt;
-      } else {
-        exit = true;
-      }
-      // exit = true;
-      // if (i === 7) exit = true;
+    const pp = temp.join("").match(/(\.)\1*/g);
+    // console.log(pp);
+    // console.log(nn);
+    const len = nn.length;
+    let data = temp.join("");
+    // console.log(data);
+    const ppf = pp.filter((x) => x.length >= len);
+    // console.log("ppf", ppf);
+    const idp = data.indexOf(ppf.shift());
+    // console.log("idp", idp);
+    const idn = data.indexOf(nn);
+    // console.log("idn", idn);
+    if (idp > -1 && idn > idp) {
+      // console.log("yes");
+      data = data.replaceAll(`${i}`, ".");
+      let t = data.split("");
+      t.splice(idp, len, `${i}`.repeat(len));
+      // console.log(data);
+      // console.log(t);
+      temp = t.join("").split("");
     }
-    if (i === 7) break;
   }
-  // const t = temp.join("").match(/(\d)\1*/g);
-  // console.log(t);
-  // const t1 = temp.join("").match(/(\.)\1*/g);
-  // console.log(t1);
-
-  // while (temp.join("").match(/\d+/g).length > 1) {
-  //   const nn = temp.join("").match(/(\d)\1*/g);
-  //   const pp = temp.join("").match(/(\.)\1*/g);
-  //   console.log(nn);
-  //   console.log(pp);
-  // }
-  // const nn = temp.join("").match(/(\d)\1*/g);
-  // const pp = temp.join("").match(/(\.)\1*/g);
-  // console.log(nn);
-  // console.log(pp);
-  // let te = [];
-  // for (let i = 0; i < nn.length; i++) {
-  //   te.push(nn[i]);
-  //   te.push(pp[i]);
-  // }
-  // te = te.filter((x) => x);
-  // console.log(te);
-  // let aux = []
-  // for (let i = 0; i < te.length; i++) {
-  //   const ult = te.findLast((x) => !x.includes("."));
-  //   const p1 = te.find((x) => x.includes(".") && x.length >= te[i]);
-  //   console.log(p1);
-  //   console.log(ult);
-  //   if (p1) {
-  //
-  //   }
-  // }
+  console.log(temp.join(""));
+  let res2 = temp.reduce((acc, item, i) => {
+    if (item !== ".") {
+      acc += +item * i;
+    }
+    return acc;
+  }, 0);
+  console.log("RES2", res2);
 }
 part2();
